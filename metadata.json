@@ -1,0 +1,6 @@
+{
+  "name": "Сон-Куль Nomad | Конные туры в Кыргызстане",
+  "description": "Аутентичные конные туры на высокогорное озеро Сон-Куль (3016 м), Кыргызстан. Жизнь в юртах кочевников, перевалы Тянь-Шаня и дикая природа.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
