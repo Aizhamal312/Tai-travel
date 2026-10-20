@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { Language } from './types';
+import { Language, Currency } from './types';
+import { getDefaultCurrencyForLanguage } from './utils/currency';
 import { WorldClock } from './components/WorldClock';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { TourOptions } from './components/TourOptions';
+import { InteractiveRouteMap } from './components/InteractiveRouteMap';
 import { Itinerary } from './components/Itinerary';
 import { AboutTour } from './components/AboutTour';
 import { IncludedExcluded } from './components/IncludedExcluded';
@@ -17,8 +19,15 @@ import { MessageCircle, Mail } from 'lucide-react';
 
 export default function App() {
   const [currentLang, setCurrentLang] = useState<Language>('ru');
+  const [currentCurrency, setCurrentCurrency] = useState<Currency>(getDefaultCurrencyForLanguage('ru'));
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [selectedTourId, setSelectedTourId] = useState<string>('classic-5d');
+
+  // When language switches, automatically switch currency and tour prices together
+  const handleLanguageChange = (newLang: Language) => {
+    setCurrentLang(newLang);
+    setCurrentCurrency(getDefaultCurrencyForLanguage(newLang));
+  };
 
   const handleSelectTour = (tourId: string) => {
     setSelectedTourId(tourId);
@@ -41,10 +50,12 @@ export default function App() {
       {/* 1. World Clocks Bar (Bishkek, France, Japan) with menu bar typography */}
       <WorldClock currentLang={currentLang} />
 
-      {/* 2. Top Header with 3-Zone contract and Language Switcher */}
+      {/* 2. Top Header with 3-Zone contract, Language Switcher and Currency Switcher */}
       <Header
         currentLang={currentLang}
-        onLanguageChange={setCurrentLang}
+        onLanguageChange={handleLanguageChange}
+        currentCurrency={currentCurrency}
+        onCurrencyChange={setCurrentCurrency}
         onOpenBooking={() => setIsBookingModalOpen(true)}
       />
 
@@ -56,41 +67,50 @@ export default function App() {
           onOpenBooking={() => setIsBookingModalOpen(true)}
         />
 
-        {/* 4. Tour Packages (3d, 5d, 7d) */}
+        {/* 4. Tour Packages (3d, 5d, 7d) with integrated Currency Converter (EUR, USD, RUB, KGS) */}
         <TourOptions
           currentLang={currentLang}
+          currentCurrency={currentCurrency}
+          onCurrencyChange={setCurrentCurrency}
           onSelectTour={handleSelectTour}
         />
 
-        {/* 5. Detailed Itinerary (D-1 to D-5) fully localized */}
+        {/* 5. Interactive Route Map (Bishkek to Song-Kul & Mountain Passes) */}
+        <InteractiveRouteMap
+          currentLang={currentLang}
+          onOpenBooking={() => setIsBookingModalOpen(true)}
+        />
+
+        {/* 6. Detailed Itinerary (D-1 to D-5) fully localized */}
         <Itinerary
           currentLang={currentLang}
           onOpenBooking={() => setIsBookingModalOpen(true)}
         />
 
-        {/* 6. About Lake Song-Kul & Nomadic Culture */}
+        {/* 7. About Lake Song-Kul & Nomadic Culture */}
         <AboutTour currentLang={currentLang} />
 
-        {/* 7. What's Included & Excluded */}
+        {/* 8. What's Included & Excluded */}
         <IncludedExcluded currentLang={currentLang} />
 
-        {/* 8. Gallery with Photo Lightbox */}
+        {/* 9. Gallery with Photo Lightbox */}
         <Gallery currentLang={currentLang} />
 
-        {/* 9. International Traveler Reviews */}
+        {/* 10. International Traveler Reviews */}
         <Reviews currentLang={currentLang} />
 
-        {/* 10. Packing Checklist & FAQ Accordion */}
+        {/* 11. Packing Checklist & FAQ Accordion */}
         <PackingAndFAQ currentLang={currentLang} />
 
-        {/* 11. Lead Capture Form & Direct Contact Channels */}
+        {/* 12. Lead Capture Form & Direct Contact Channels */}
         <BookingSection
           currentLang={currentLang}
+          currentCurrency={currentCurrency}
           selectedTourId={selectedTourId}
         />
       </main>
 
-      {/* 12. Footer */}
+      {/* 13. Footer */}
       <Footer currentLang={currentLang} />
 
       {/* Quick Booking Modal */}
@@ -98,6 +118,7 @@ export default function App() {
         isOpen={isBookingModalOpen}
         onClose={() => setIsBookingModalOpen(false)}
         currentLang={currentLang}
+        currentCurrency={currentCurrency}
       />
 
       {/* Floating Messenger Quick Button Pill (Bottom Right) */}

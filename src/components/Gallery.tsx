@@ -21,37 +21,37 @@ export function Gallery({ currentLang }: GalleryProps) {
 
   const images: GalleryImage[] = [
     {
-      src: '/src/assets/images/hero_songkul_horses_1791824969324.jpg',
+      src: '/images/hero.jpg',
       title: 'Всадники на фоне хребтов Сон-Куля',
       category: 'horses',
       caption: 'Конная группа движется по джайлоо вдоль лазурного берега озера на высоте 3016 м',
     },
     {
-      src: '/src/assets/images/yurt_camp_tian_shan_1791824988583.jpg',
+      src: '/images/yurt-camp.jpg',
       title: 'Традиционный юрточный лагерь',
       category: 'yurts',
       caption: 'Белоснежные войлочные юрты на альпийском лугу в лучах заходящего солнца',
     },
     {
-      src: '/src/assets/images/songkul_lake_riders_1791825019146.jpg',
+      src: '/images/lake-sunset.jpg',
       title: 'Закат над озером Сон-Куль',
       category: 'lake',
       caption: 'Зеркальное отражение снежных вершин Тянь-Шаня и вечерний конный выезд',
     },
     {
-      src: '/src/assets/images/nomad_guide_horse_1791825006077.jpg',
+      src: '/images/guide-horse.jpg',
       title: 'Кыргызский проводник в ак-калпаке',
       category: 'mountains',
       caption: 'Опытный проводник на каменистом перевале Туз-Ашуу (3229 м)',
     },
     {
-      src: '/src/assets/images/hero_songkul_horses_1791824969324.jpg',
+      src: '/images/tour-classic.jpg',
       title: 'Табуны свободных кыргызских коней',
       category: 'horses',
       caption: 'Бескрайние альпийские просторы Внутреннего Тянь-Шаня',
     },
     {
-      src: '/src/assets/images/yurt_camp_tian_shan_1791824988583.jpg',
+      src: '/images/tour-express.jpg',
       title: 'Уютный вечер у очага',
       category: 'yurts',
       caption: 'Дым от печи-буржуйки и горячий горный чай под звездным куполом',
@@ -148,7 +148,14 @@ export function Gallery({ currentLang }: GalleryProps) {
                 src={img.src}
                 alt={img.title}
                 referrerPolicy="no-referrer"
+                loading="lazy"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (!target.src.includes('hero_songkul_horses')) {
+                    target.src = '/images/hero_songkul_horses_1791824969324.jpg';
+                  }
+                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
                 <div className="flex items-center justify-between gap-2 text-white">

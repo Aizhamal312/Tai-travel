@@ -1,14 +1,20 @@
 import { useState, FormEvent } from 'react';
 import { MessageCircle, Mail, Send, CheckCircle2 } from 'lucide-react';
-import { Language } from '../types';
+import { Language, Currency } from '../types';
 import { translations } from '../i18n/translations';
+import { formatCurrencyPrice } from '../utils/currency';
 
 interface BookingSectionProps {
   currentLang: Language;
+  currentCurrency?: Currency;
   selectedTourId?: string;
 }
 
-export function BookingSection({ currentLang, selectedTourId = 'classic-5d' }: BookingSectionProps) {
+export function BookingSection({
+  currentLang,
+  currentCurrency = 'USD',
+  selectedTourId = 'classic-5d',
+}: BookingSectionProps) {
   const t = translations[currentLang];
 
   const [fullName, setFullName] = useState('');
@@ -185,11 +191,17 @@ Email: ${email || 'Не указано'}
                       onChange={(e) => setTourId(e.target.value)}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-[#D5CEC2] focus:border-[#0F4C3A] focus:ring-2 focus:ring-[#0F4C3A]/20 text-sm outline-none bg-white transition-all"
                     >
-                      {t.tourPackages.map((p) => (
-                        <option key={p.id} value={p.id}>
-                          {p.title} ({p.duration})
-                        </option>
-                      ))}
+                      {t.tourPackages.map((p, idx) => {
+                        const priceStr = formatCurrencyPrice(
+                          p.basePriceUSD || (idx === 0 ? 320 : idx === 1 ? 490 : 720),
+                          currentCurrency
+                        );
+                        return (
+                          <option key={p.id} value={p.id}>
+                            {p.title} ({priceStr} · {p.duration})
+                          </option>
+                        );
+                      })}
                     </select>
                   </div>
 
@@ -336,27 +348,6 @@ Email: ${email || 'Не указано'}
                 >
                   {gmailEmail}
                 </a>
-              </div>
-            </div>
-
-            {/* Base Camps Locations in Kyrgyzstan */}
-            <div className="bg-white rounded-3xl border border-[#E2DDD5] p-6 sm:p-7 shadow-xs">
-              <h4 className="font-bold text-[#0F2922] text-sm mb-3">
-                Базовые пункты в Кыргызстане:
-              </h4>
-              <div className="space-y-3 text-xs text-[#475569]">
-                <div>
-                  <strong className="text-[#1E293B] block">Офис в Бишкеке:</strong>
-                  ул. Абдрахманова 170 / ул. Токтогула, Бишкек
-                </div>
-                <div>
-                  <strong className="text-[#1E293B] block">Конная база в Кочкоре:</strong>
-                  село Кочкор, Нарынская область (старт маршрутов на Сон-Куль)
-                </div>
-                <div>
-                  <strong className="text-[#1E293B] block">Юрточный лагерь на Сон-Куле:</strong>
-                  Северный берег озера Сон-Куль (высота 3016 м)
-                </div>
               </div>
             </div>
           </div>

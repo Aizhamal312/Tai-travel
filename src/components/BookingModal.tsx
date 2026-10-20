@@ -1,15 +1,22 @@
 import { useState, FormEvent } from 'react';
 import { X, MessageCircle, Mail, Send, CheckCircle2 } from 'lucide-react';
-import { Language } from '../types';
+import { Language, Currency } from '../types';
 import { translations } from '../i18n/translations';
+import { formatCurrencyPrice } from '../utils/currency';
 
 interface BookingModalProps {
   isOpen: boolean;
   onClose: () => void;
   currentLang: Language;
+  currentCurrency?: Currency;
 }
 
-export function BookingModal({ isOpen, onClose, currentLang }: BookingModalProps) {
+export function BookingModal({
+  isOpen,
+  onClose,
+  currentLang,
+  currentCurrency = 'USD',
+}: BookingModalProps) {
   const t = translations[currentLang];
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -187,11 +194,17 @@ Email: ${email}
                     onChange={(e) => setTourId(e.target.value)}
                     className="w-full px-3 py-2 rounded-xl border border-[#D5CEC2] focus:border-[#0F4C3A] text-xs outline-none bg-white"
                   >
-                    {t.tourPackages.map((p) => (
-                      <option key={p.id} value={p.id}>
-                        {p.title}
-                      </option>
-                    ))}
+                    {t.tourPackages.map((p, idx) => {
+                      const priceStr = formatCurrencyPrice(
+                        p.basePriceUSD || (idx === 0 ? 320 : idx === 1 ? 490 : 720),
+                        currentCurrency
+                      );
+                      return (
+                        <option key={p.id} value={p.id}>
+                          {p.title} ({priceStr})
+                        </option>
+                      );
+                    })}
                   </select>
                 </div>
 

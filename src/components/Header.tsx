@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import { Menu, X, Globe, ChevronDown, Compass } from 'lucide-react';
-import { Language } from '../types';
+import { Language, Currency } from '../types';
 import { translations } from '../i18n/translations';
+import { CurrencySwitcher } from './CurrencySwitcher';
+import { CURRENCY_OPTIONS } from '../utils/currency';
 
 interface HeaderProps {
   currentLang: Language;
   onLanguageChange: (lang: Language) => void;
+  currentCurrency: Currency;
+  onCurrencyChange: (currency: Currency) => void;
   onOpenBooking: () => void;
 }
 
@@ -17,7 +21,13 @@ const LANGUAGES: { code: Language; label: string; flag: string }[] = [
   { code: 'pl', label: 'Polski', flag: '🇵🇱' },
 ];
 
-export function Header({ currentLang, onLanguageChange, onOpenBooking }: HeaderProps) {
+export function Header({
+  currentLang,
+  onLanguageChange,
+  currentCurrency,
+  onCurrencyChange,
+  onOpenBooking,
+}: HeaderProps) {
   const t = translations[currentLang];
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
@@ -48,6 +58,13 @@ export function Header({ currentLang, onLanguageChange, onOpenBooking }: HeaderP
               className="whitespace-nowrap shrink-0 hover:text-[#0F4C3A] transition-colors py-1"
             >
               {t.navTours}
+            </a>
+            <a
+              href="#map"
+              className="whitespace-nowrap shrink-0 hover:text-[#0F4C3A] transition-colors py-1 flex items-center gap-1"
+            >
+              <Compass className="w-3.5 h-3.5 text-[#0F4C3A]" />
+              <span>{t.navMap}</span>
             </a>
             <a
               href="#itinerary"
@@ -81,8 +98,14 @@ export function Header({ currentLang, onLanguageChange, onOpenBooking }: HeaderP
             </a>
           </nav>
 
-          {/* Zone 3: Language Selector + Primary Action */}
-          <div className="flex items-center gap-3 shrink-0">
+          {/* Zone 3: Currency Switcher + Language Selector + Primary Action */}
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            {/* Currency Switcher */}
+            <CurrencySwitcher
+              currentCurrency={currentCurrency}
+              onCurrencyChange={onCurrencyChange}
+            />
+
             {/* Language Switcher Dropdown */}
             <div className="relative">
               <button
@@ -162,6 +185,14 @@ export function Header({ currentLang, onLanguageChange, onOpenBooking }: HeaderP
               {t.navTours}
             </a>
             <a
+              href="#map"
+              onClick={() => setMobileMenuOpen(false)}
+              className="py-2 px-3 rounded-md hover:bg-[#EAE4D8]/50 text-[#0F4C3A] font-semibold flex items-center gap-2"
+            >
+              <Compass className="w-4 h-4 text-[#0F4C3A]" />
+              <span>{t.navMap}</span>
+            </a>
+            <a
               href="#itinerary"
               onClick={() => setMobileMenuOpen(false)}
               className="py-2 px-3 rounded-md hover:bg-[#EAE4D8]/50 text-[#1E293B]"
@@ -197,6 +228,28 @@ export function Header({ currentLang, onLanguageChange, onOpenBooking }: HeaderP
               {t.navContact}
             </a>
           </nav>
+
+          {/* Mobile Currency Selector */}
+          <div className="pt-3 border-t border-[#E2DDD5]">
+            <div className="text-xs font-medium text-[#64748B] mb-2">Валюта / Currency:</div>
+            <div className="grid grid-cols-4 gap-1.5">
+              {CURRENCY_OPTIONS.map((opt) => (
+                <button
+                  key={opt.code}
+                  type="button"
+                  onClick={() => onCurrencyChange(opt.code)}
+                  className={`py-1.5 px-2 text-xs rounded-md flex items-center justify-center gap-1 border cursor-pointer ${
+                    currentCurrency === opt.code
+                      ? 'bg-[#0F4C3A] text-white border-[#0F4C3A] font-bold'
+                      : 'bg-white text-[#334155] border-[#D5CEC2]'
+                  }`}
+                >
+                  <span>{opt.symbol}</span>
+                  <span className="font-semibold">{opt.code}</span>
+                </button>
+              ))}
+            </div>
+          </div>
 
           {/* Mobile Language Selector Tabs */}
           <div className="pt-3 border-t border-[#E2DDD5]">

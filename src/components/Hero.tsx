@@ -9,7 +9,7 @@ interface HeroProps {
 
 export function Hero({ currentLang, onOpenBooking }: HeroProps) {
   const t = translations[currentLang];
-  const heroImgUrl = '/src/assets/images/hero_songkul_horses_1791824969324.jpg';
+  const heroImgUrl = '/images/hero.jpg';
   const whatsappUrl = 'https://wa.me/996220073174?text=' + encodeURIComponent('Здравствуйте! Я хочу узнать подробнее о конном туре на озеро Сон-Куль.');
   const gmailUrl = 'https://mail.google.com/mail/?view=cm&fs=1&to=abibullakyzyaizhamal94@gmail.com&su=' + encodeURIComponent('Бронирование конного тура на озеро Сон-Куль');
 
@@ -21,10 +21,15 @@ export function Hero({ currentLang, onOpenBooking }: HeroProps) {
           src={heroImgUrl}
           alt="Horse riding expedition along Lake Song-Kul in Kyrgyzstan"
           referrerPolicy="no-referrer"
+          fetchPriority="high"
           className="w-full h-full object-cover object-center scale-105 transform motion-safe:animate-fade-in"
           onError={(e) => {
-            // Graceful fallback to rich alpine gradient
-            (e.target as HTMLElement).style.display = 'none';
+            const target = e.target as HTMLImageElement;
+            if (target.src.endsWith('/images/hero.jpg')) {
+              target.src = '/images/hero_songkul_horses_1791824969324.jpg';
+            } else {
+              target.style.display = 'none';
+            }
           }}
         />
         {/* Measured dark overlay for WCAG AA readability */}

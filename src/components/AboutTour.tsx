@@ -8,8 +8,8 @@ interface AboutTourProps {
 
 export function AboutTour({ currentLang }: AboutTourProps) {
   const t = translations[currentLang];
-  const yurtImg = '/src/assets/images/yurt_camp_tian_shan_1791824988583.jpg';
-  const guideImg = '/src/assets/images/nomad_guide_horse_1791825006077.jpg';
+  const yurtImg = '/images/yurt-camp.jpg';
+  const guideImg = '/images/guide-horse.jpg';
 
   return (
     <section id="about" className="py-20 sm:py-28 bg-[#FBF9F5] border-b border-[#E2DDD5]">
@@ -53,28 +53,42 @@ export function AboutTour({ currentLang }: AboutTourProps) {
 
           {/* Right Dual Image Showcase */}
           <div className="lg:col-span-6 grid grid-cols-2 gap-4">
-            <div className="relative rounded-2xl overflow-hidden aspect-[4/5] shadow-md border border-[#E2DDD5]">
+            <div className="relative rounded-2xl overflow-hidden aspect-[4/5] shadow-md border border-[#E2DDD5] bg-[#EBF7F2]">
               <img
                 src={yurtImg}
                 alt="Yurt camp on jailoo meadows near Lake Song-Kul"
                 referrerPolicy="no-referrer"
+                loading="lazy"
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (target.src.endsWith('/images/yurt-camp.jpg')) {
+                    target.src = '/images/yurt_camp_tian_shan_1791824988583.jpg';
+                  }
+                }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-4">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-4 pointer-events-none">
                 <span className="text-xs font-semibold text-white tracking-wide">
                   Юрточный лагерь на джайлоо
                 </span>
               </div>
             </div>
 
-            <div className="relative rounded-2xl overflow-hidden aspect-[4/5] shadow-md border border-[#E2DDD5] mt-6 sm:mt-10">
+            <div className="relative rounded-2xl overflow-hidden aspect-[4/5] shadow-md border border-[#E2DDD5] bg-[#EBF7F2] mt-6 sm:mt-10">
               <img
                 src={guideImg}
                 alt="Experienced Kyrgyz guide horseman with ak-kalpak"
                 referrerPolicy="no-referrer"
+                loading="lazy"
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (target.src.endsWith('/images/guide-horse.jpg')) {
+                    target.src = '/images/nomad_guide_horse_1791825006077.jpg';
+                  }
+                }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-4">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-4 pointer-events-none">
                 <span className="text-xs font-semibold text-white tracking-wide">
                   Опытный гид и кыргызский скакун
                 </span>

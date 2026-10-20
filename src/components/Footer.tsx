@@ -49,6 +49,11 @@ export function Footer({ currentLang }: FooterProps) {
                 </a>
               </li>
               <li>
+                <a href="#map" className="hover:text-white transition-colors">
+                  {t.navMap}
+                </a>
+              </li>
+              <li>
                 <a href="#itinerary" className="hover:text-white transition-colors">
                   {t.navItinerary}
                 </a>
@@ -110,7 +115,7 @@ export function Footer({ currentLang }: FooterProps) {
 
               <div className="flex items-start gap-2 pt-2 text-[#94A3B8]">
                 <MapPin className="w-3.5 h-3.5 text-[#34D399] shrink-0 mt-0.5" />
-                <span>Бишкек & село Кочкор, Кыргызстан</span>
+                <span>Бишкек & село Кызарт, Кыргызстан</span>
               </div>
             </div>
           </div>
